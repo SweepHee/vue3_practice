@@ -80,6 +80,42 @@
 
         <!-- v-if와 v-show의 차이는 v-if는 조건안맞으면 태그가 아예 렌더링 되지않음. v-show는 display:none이 됨. (즉 렌더링은 된다) -->
         <h1 v-show="bShow">bShow가 true면 보인다</h1>
+
+        <button type="button" @click="increaseCounter">Add 1</button>
+        <p>
+            The counter is : {{ counter }}
+        </p>
+
+        <button type="button" @click="setCount(7)">Set 7</button>
+        <p>The counter is : {{ setCounter }} </p>
+
+        <button type="button" @click="one(), two()">이벤트 2개 실행하기</button>
+
+        <select v-model="selectedValue" @change="changeSelect">
+            <option value="서울">서울</option>
+            <option value="부산">부산</option>
+            <option value="제주">제주</option>
+        </select>
+
+        <!-- enter 말고도 .tab, .delete, .space, .up, .down, .left, .right 등이 있음 -->
+        <input @keyup.enter="submit">
+
+        <!-- Alt + Enter -->
+        <input @keyup.alt.enter="clear" />
+
+        <!-- Ctrl + Click -->
+        <div @click.ctrl="doSomething">Do Something</div>
+        <!-- 쉬프트도 가능하다 -->
+
+        <h1>
+            Full Name: {{ fullName }}
+        </h1>
+        <input type="text" v-model="firstName">
+
+        <h1>
+            Full Name : {{ fullNamee }}
+        </h1>
+        <button type="button" @click="changeName">변경</button>
     </div>
 </template>
 
@@ -135,8 +171,28 @@ export default {
 
             bRender: true,
             type: "A",
-            bShow: false
+            bShow: false,
+
+            counter: 0,
+            setCounter: 0,
+            firstName: 'SeungHee',
+            lastName: 'Jeon',
+            fullNamee: '',
         };
+    },
+    computed: {
+        /* computed에 정의했기때문에 fullName이 이미 문서에 선언됐더라도 firstName이 변경되면 fullName이 선언한곳에서 따라 바뀐다 */
+        fullName() {
+            return this.firstName + ' ' + this.lastName;
+        }
+    },
+    watch: {
+        firstName () {
+            this.fullNamee = this.firstName + ' ' + this.lastName;
+        },
+        lastName() {
+            this.fullNamee = this.firstName + ' ' + this.lastName;
+        }
     },
     
     beforeCreate() {}, 
@@ -145,6 +201,25 @@ export default {
     updated() {}, 
     beforeUnmount(){}, 
     unmounted() {}, 
-    methods: {}
+    methods: {
+        increaseCounter() {
+            this.counter = this.counter + 1;
+        },
+        setCount(setCounter) {
+            this.setCounter = setCounter
+        },
+        one() {
+            alert("One");
+        },
+        two() {
+            alert("Two");
+        },
+        changeSelect() {
+            alert(this.selectedValue);
+        },
+        changeName () {
+            this.firstName = "Jeon Seung Hee";
+        }
+    }
 }
 </script>
